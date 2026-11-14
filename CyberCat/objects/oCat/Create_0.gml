@@ -7,7 +7,7 @@ in_air = 4;			//checks if in air
 grav = 1;		// sets gravity
 frame = 0;
 scale = 7;
-undash = 1;
+undash = 30;
 image_xscale = scale;
 image_yscale = scale;
 
@@ -31,7 +31,7 @@ view_hport[0] = 800;
 cam_speed_x = 5;
 cam_speed_y = 5;
 //setting the camera
-view_camera = camera_create_view(0,0,view_wport[0], view_hport[0], 0, oCat, cam_speed_x, cam_speed_y);
+view_camera[0] = camera_create_view(0,0,view_wport[0], view_hport[0], 0, oCat, cam_speed_x, cam_speed_y);
 //geno - resizing the screen
 surface_resize(application_surface, view_wport[0], view_hport[0]);
 //pheno - resizing the screen
@@ -51,6 +51,15 @@ x = place_centre_x();
 y = place_centre_y();
 
 //step functions
+function collides_at(_x, _y)
+{
+	for (var i = 0; i < array_length(collidable); i++)
+	{
+		if (place_meeting(_x, _y, collidable[i])) return true;
+	}
+	return false;
+}
+
 function geno_move() 
 	{
 	
@@ -73,60 +82,47 @@ function geno_move()
 		{
 		speedy = jump_height;
 		}
-		
 		speedy += grav;
-
 	}
 
 function pheno_move()
+{
+	var _hit_x = false;
+	var _hit_y = false;
+	var _steps = max(1, ceil(abs(speedx) + abs(speedy)));
+	var _dx = speedx / _steps;
+	var _dy = speedy / _steps;
+
+	repeat (_steps)
 	{
-	divisor = ceil(abs(speedx) + abs(speedy));
-	repeat(divisor)
+		if (!_hit_x)
 		{
-		checked_x = true;
-		checked_y = true;
-			for(var i = 0; i != array_length(collidable); i += 1)
-				{
-				if(!place_meeting(x+(speedx/divisor), y, collidable[i]) and checked_x == true)
-					{
-					x += speedx/divisor
-					if (x <= 1)
-						{
-						x = 1
-						}
-					else if (x >= view_wport - 1)
-						{
-						x = view_wport - 1
-						}
-					}
-				else
-					{
-					checked_x = false;
-					}
-				if(!place_meeting(x, y+(speedy/divisor), collidable[i]) and checked_y == true)
-					{
-					y += speedy/divisor;
-					}
-				else
-					{
-					checked_y = false;
-					}
-				}
-			}
-		if (!place_meeting(x, y + 1, oGround))
-	    {
-			in_air += 1;
-	    }
-	    else
-	    {
-			in_air = 0;
-			undash = true
+			if (!collides_at(x + _dx, y)) x += _dx;
+			else { _hit_x = true; speedx = 0; }
 		}
+		if (!_hit_y)
+		{
+			if (!collides_at(x, y + _dy)) y += _dy;
+			else { _hit_y = true; speedy = 0; }
 		}
+	}
+
+	x = clamp(x, 1, room_width - 1);
+
+	if (collides_at(x, y + 1))
+	{
+		in_air = 0;
+	}
+	else
+	{
+		in_air += 1;
+	}
+}
+
 
 function framerate()
 	{
-	if (speedx = 0)
+	if (speedx == 0)
 	{
 	frame += 0.01
 	if(frame >= 2)
@@ -155,10 +151,17 @@ function framerate()
 	}
 
 function dash()
+{
+	if (undash < 0 and keyboard_check_pressed(vk_space))
 	{
-	if(in_air != 0 and undash = true and keyboard_key_press(vk_space))
-		{
-		speedx *= 10;
-		undash = false;
-		}
+		if(in_air == 0)
+			{
+			speedx = sign(image_xscale) * 30; 
+			}
+		else
+			{
+			speedx = sign(image_xscale) * 50;
+			}
+		undash = 50;
 	}
+}
