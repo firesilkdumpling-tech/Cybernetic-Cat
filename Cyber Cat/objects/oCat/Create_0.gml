@@ -7,6 +7,7 @@ in_air = 4;			//checks if in air
 grav = 1;		// sets gravity
 frame = 0;
 scale = 7;
+undash = false;
 image_xscale = scale;
 image_yscale = scale;
 
@@ -88,7 +89,15 @@ function pheno_move()
 				{
 				if(!place_meeting(x+(speedx/divisor), y, collidable[i]) and checked_x == true)
 					{
-					x += speedx/divisor;
+					x += speedx/divisor
+					if (x <= 1)
+						{
+						x = 1
+						}
+					else if (x >= view_wport - 1)
+						{
+						x = view_wport - 1
+						}
 					}
 				else
 					{
@@ -111,6 +120,7 @@ function pheno_move()
 	    else
 	    {
 			in_air = 0;
+			undash = true
 		}
 		}
 
@@ -118,7 +128,7 @@ function framerate()
 	{
 	if (speedx = 0)
 	{
-	frame += 0.07
+	frame += 0.01
 	if(frame >= 2)
 		{
 		frame = 0
@@ -142,4 +152,13 @@ function framerate()
 			}
 	
 	}
+	}
+
+function dash()
+	{
+	if(in_air != 0 and undash = true and keyboard_key_press(vk_space))
+		{
+		speedx *= 10;
+		undash = false;
+		}
 	}
