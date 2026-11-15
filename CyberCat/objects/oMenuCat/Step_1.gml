@@ -5,6 +5,6 @@ if(oKill.dead == 0)
 }
 else
 {
-animate(0.1)
+animate(0.1, 0.02)
 image_alpha = 1;
 }

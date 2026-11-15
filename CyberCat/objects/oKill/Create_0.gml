@@ -2,6 +2,7 @@ x = oCat.place_centre_x()
 y = 0
 spe = 5
 dead = 0
+alive = 0
 
 function bounce() 
 {
@@ -9,6 +10,7 @@ function bounce()
 	{
     sety = -100
 	setx = oCat.place_centre_x()
+	alive += 1
 	
 	}
 	

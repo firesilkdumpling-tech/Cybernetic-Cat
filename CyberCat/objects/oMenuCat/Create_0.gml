@@ -1,7 +1,9 @@
 frame = 0
-function animate(incr)
+function animate(incr,sIncr)
 {
-	frame += incr
+	if (frame < 1) {frame += sIncr} else if (frame > 3 and frame < 4) {frame += sIncr} else{
+	frame += incr}
+	
 	image_index = floor(frame)
 	if (frame >= 5)
 	{
