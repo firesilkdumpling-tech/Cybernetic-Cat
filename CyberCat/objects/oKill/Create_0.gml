@@ -1,7 +1,7 @@
 x = oCat.place_centre_x()
 y = 0
 spe = 5
-dead = 0
+dead = 1
 alive = 0
 
 function bounce() 
@@ -9,7 +9,7 @@ function bounce()
 	if(place_meeting(x, y + hspeed, oGround))
 	{
     sety = -100
-	setx = oCat.place_centre_x()
+	setx = oCat.x
 	alive += 1
 	
 	}
