@@ -76,10 +76,10 @@ function geno_move()
 	if (speedx > 0) facing = 1;
 	else if (speedx < 0) facing = -1;
 
-	if (in_air == 0 and keyboard_check(ord("W")))
+	/*if (in_air == 0 and keyboard_check(ord("W")))
 	{
 		speedy = jump_height;
-	}
+	}*/
 	speedy += grav;
 }
 
