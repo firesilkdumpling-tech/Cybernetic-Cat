@@ -1,3 +1,5 @@
+//oCat
+
 speedx = 0;				//overall x speed
 speedx_multiplier = 1;
 resistance = 0.8;
